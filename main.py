@@ -128,7 +128,7 @@ def train_nn(sess, epochs, batch_size, get_batches_fn, train_op, cross_entropy_l
     # TODO: Implement function
     start_time = time.time()
     total_duration=time.time()-start_time
-    sess.run(tf.global_variables_initializer())
+    #sess.run(tf.global_variables_initializer())
     for epoch in range(epochs):
         probs=0.5
         rate=0.001
@@ -147,7 +147,7 @@ def train_nn(sess, epochs, batch_size, get_batches_fn, train_op, cross_entropy_l
         epoch_duration = time.time() - start_time
         total_duration += epoch_duration
         print("EPOCH {} ...".format(epoch+1))
-        #print("Training Accuracy = {:.3f}".format(training_accuracy))
+        print("Loss value is = {:.3f}".format(loss))
         #print("Validation Accuracy = {:.3f}".format(validation_accuracy))
         print("Epoch Duration :", epoch_duration)
         print("Total Duration :", total_duration)
@@ -166,7 +166,7 @@ def run():
     tests.test_for_kitti_dataset(data_dir)
     
     #correct label placeholders
-    correct_label = tf.placeholder(tf.float32,(None,image_shape[0],image_shape[1],2))
+    correct_label = tf.placeholder(tf.float32,(None,image_shape[0],image_shape[1],num_classes))
     learning_rate = tf.placeholder(tf.float32, name='learning_rate')
     
     # Download pretrained vgg model
@@ -181,8 +181,7 @@ def run():
         vgg_path = os.path.join(data_dir, 'vgg')
         # Create function to get batches
         get_batches_fn = helper.gen_batch_function(os.path.join(data_dir, 'data_road/training'), image_shape)
-        #Setting Batch Size
-        batch_size=10
+
         # OPTIONAL: Augment Images for better results
         #  https://datascience.stackexchange.com/questions/5224/how-to-prepare-augment-images-for-neural-network
 
@@ -199,6 +198,10 @@ def run():
         
         #Setting keep prob
         #keep_prob = 0.5
+        
+        #Setting Batch Size
+        batch_size=10
+        
         #Setting number of epochs
         epochs = 10
         train_nn(sess,epochs, batch_size, get_batches_fn, train_op, cross_entropy_loss, input_image, correct_label, keep_prob, learning_rate)
