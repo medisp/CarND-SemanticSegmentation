@@ -147,7 +147,7 @@ def train_nn(sess, epochs, batch_size, get_batches_fn, train_op, cross_entropy_l
         epoch_duration = time.time() - start_time
         total_duration += epoch_duration
         print("EPOCH {} ...".format(epoch+1))
-        print("Loss value is = {:.3f}".format(loss))
+        print("Loss value is = {}".format(loss))
         #print("Validation Accuracy = {:.3f}".format(validation_accuracy))
         print("Epoch Duration :", epoch_duration)
         print("Total Duration :", total_duration)
