@@ -133,7 +133,7 @@ def train_nn(sess, epochs, batch_size, get_batches_fn, train_op, cross_entropy_l
     sess.run(tf.global_variables_initializer())
     for epoch in range(epochs):
         probs=0.5
-        rate=0.001
+        rate=0.0005
         rate*=(1.1*epoch)
         for image, label in get_batches_fn(batch_size):
                 #input_image=image 
@@ -149,7 +149,7 @@ def train_nn(sess, epochs, batch_size, get_batches_fn, train_op, cross_entropy_l
         epoch_duration = time.time() - start_time
         total_duration += epoch_duration
         print("EPOCH {} ...".format(epoch+1))
-        print("Loss value is = {}".format(loss))
+        print("Loss value is = {}".format(loss[1]))
         #print("Validation Accuracy = {:.3f}".format(validation_accuracy))
         print("Epoch Duration :", epoch_duration)
         print("Total Duration :", total_duration)
@@ -205,7 +205,7 @@ def run():
         batch_size=10
         
         #Setting number of epochs
-        epochs = 10
+        epochs = 40
         train_nn(sess,epochs, batch_size, get_batches_fn, train_op, cross_entropy_loss, input_image, correct_label, keep_prob, learning_rate)
         
         # TODO: Save inference data using helper.save_inference_samples
