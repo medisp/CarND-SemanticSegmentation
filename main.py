@@ -108,8 +108,10 @@ def layers_modified(vgg_layer3_out, vgg_layer4_out, vgg_layer7_out, num_classes)
     #bias_regularizer=None,
     
     
+    
     l2weights_init_const = 0.01
     l2weights_reg_const = 1e-3
+    l2weights_reg_const2 = 1e-4
     conv1x1 = tf.layers.conv2d(vgg_layer7_out, 
                                num_classes, 
                                kernel_size = 1, 
@@ -146,7 +148,7 @@ def layers_modified(vgg_layer3_out, vgg_layer4_out, vgg_layer7_out, num_classes)
                                          #activation=tf.nn.relu,
                                          kernel_initializer = tf.random_normal_initializer(stddev = l2weights_init_const),
                                          #bias_initializer = tf.zeros_initializer(),
-                                         kernel_regularizer = tf.contrib.layers.l2_regularizer(l2weights_reg_const))
+                                         kernel_regularizer = tf.contrib.layers.l2_regularizer(l2weights_reg_const2))
     
     # 1x1 convolution on layer 3
     #layer3_1x1 = tf.layers.conv2d(vgg_layer3_out, num_classes, kernel_size = 1, strides=(1,1), padding = 'same', kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3))
@@ -163,7 +165,7 @@ def layers_modified(vgg_layer3_out, vgg_layer4_out, vgg_layer7_out, num_classes)
                                          #activation=tf.nn.relu,
                                          kernel_initializer = tf.random_normal_initializer(stddev = l2weights_init_const),
                                          #bias_initializer = tf.zeros_initializer(),
-                                         kernel_regularizer = tf.contrib.layers.l2_regularizer(l2weights_reg_const))
+                                         kernel_regularizer = tf.contrib.layers.l2_regularizer(l2weights_reg_const2))
     
     #tf.Print(conv1x1,[tf.shape(deconv3)[1:]])
     
@@ -289,10 +291,10 @@ def run():
         #keep_prob = 0.5
         
         #Setting Batch Size
-        batch_size = 15
+        batch_size = 20
         
         #Setting number of epochs
-        epochs = 30
+        epochs = 45
         train_nn(sess,epochs, batch_size, get_batches_fn, train_op, cross_entropy_loss, input_image, correct_label, keep_prob, learning_rate)
         
         # TODO: Save inference data using helper.save_inference_samples
