@@ -103,7 +103,7 @@ def layers_modified(vgg_layer3_out, vgg_layer4_out, vgg_layer7_out, num_classes)
     conv1x1 = tf.layers.conv2d(vgg_layer7_out, num_classes, kernel_size = 1, strides=(1,1), padding = 'same', kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3))
     
     #deconvolution + matching output dimensions of layer 4
-    deconv1 = tf.layers.conv2d_transpose(conv1x1, filters=vgg_layer4_out.get_shape().as_list()[-1], 4, 2, padding='same',kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3))
+    deconv1 = tf.layers.conv2d_transpose(conv1x1, filters=vgg_layer4_out.get_shape().as_list()[-1], kernel_size= 4, strides= (2, 2), padding='same',kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3))
     
     # 1x1 convolution on layer 4
     #layer4_1x1 = tf.layers.conv2d(vgg_layer4_out, num_classes, kernel_size = 1, strides=(1,1), padding = 'same', kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3))
@@ -112,7 +112,7 @@ def layers_modified(vgg_layer3_out, vgg_layer4_out, vgg_layer7_out, num_classes)
     skip1 = tf.add(deconv1,vgg_layer4_out) 
     
     #Deconvolution + matching output dimensions of layer 3
-    deconv2 = tf.layers.conv2d_transpose(skip1, filter=vgg_layer3_out.get_shape().as_list()[-1], 4, 2, padding='same',kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3))
+    deconv2 = tf.layers.conv2d_transpose(skip1, filter=vgg_layer3_out.get_shape().as_list()[-1], kernel_size= 4,strides= (2,2), padding='same' ,kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3))
     
     # 1x1 convolution on layer 3
     #layer3_1x1 = tf.layers.conv2d(vgg_layer3_out, num_classes, kernel_size = 1, strides=(1,1), padding = 'same', kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3))
