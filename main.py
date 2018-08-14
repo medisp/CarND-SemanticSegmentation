@@ -282,10 +282,10 @@ def run():
         #keep_prob = 0.5
         
         #Setting Batch Size
-        batch_size=14
+        batch_size = 12
         
         #Setting number of epochs
-        epochs = 40
+        epochs = 5
         train_nn(sess,epochs, batch_size, get_batches_fn, train_op, cross_entropy_loss, input_image, correct_label, keep_prob, learning_rate)
         
         # TODO: Save inference data using helper.save_inference_samples
