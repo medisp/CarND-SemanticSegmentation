@@ -128,7 +128,7 @@ def train_nn(sess, epochs, batch_size, get_batches_fn, train_op, cross_entropy_l
     # TODO: Implement function
     start_time = time.time()
     total_duration=time.time()-start_time
-    #sess.run(tf.global_variables_initializer())
+    sess.run(tf.global_variables_initializer())
     for epoch in range(epochs):
         probs=0.5
         rate=0.001
