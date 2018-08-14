@@ -133,8 +133,8 @@ def train_nn(sess, epochs, batch_size, get_batches_fn, train_op, cross_entropy_l
     sess.run(tf.global_variables_initializer())
     for epoch in range(epochs):
         probs=0.5
-        rate=0.0005
-        rate*=(1.1*epoch)
+        rate=0.0003
+        rate*=(epoch+1)/5
         for image, label in get_batches_fn(batch_size):
                 #input_image=image 
                 #correct_label=label
