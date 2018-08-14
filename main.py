@@ -80,8 +80,8 @@ def layers(vgg_layer3_out, vgg_layer4_out, vgg_layer7_out, num_classes):
     # adding skip layer 3 with tf.add
     skip2 = tf.add(deconv2, layer3_1x1)
         
-    #Deconvolution
-    deconv3 = tf.layers.conv2d_transpose(skip2, num_classes, 4, 2, padding='same',kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3))
+    #Deconvolution upsampling by 8
+    deconv3 = tf.layers.conv2d_transpose(skip2, num_classes, 16, 8, padding='same',kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3))
     
     tf.Print(conv1x1,[tf.shape(conv1x1)[1:]])
     
