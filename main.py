@@ -60,13 +60,13 @@ def layers(vgg_layer3_out, vgg_layer4_out, vgg_layer7_out, num_classes):
     # TODO: Implement function
     # creating a fully convolutional layer with 1x1 convolutions 
     #num_classes = 2
-    conv1x1 = tf.layers.conv2d(vgg_layer7_out, num_classes, 1, padding = 'same', kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3))
+    conv1x1 = tf.layers.conv2d(vgg_layer7_out, num_classes, kernel = 1, strides=(1,1), padding = 'same', kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3))
     
     #deconvolution with kernel size 4 and stride 2
     deconv1 = tf.layers.conv2d_transpose(conv1x1, num_classes, 4, 2, padding='same',kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3))
     
     # 1x1 convolution on layer 4
-    layer4_1x1 = tf.layers.conv2d(vgg_layer4_out, num_classes, 1, padding = 'same', kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3))
+    layer4_1x1 = tf.layers.conv2d(vgg_layer4_out, num_classes, kernel = 1, strides=(1,1), padding = 'same', kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3))
     # adding skip layer 4 with tf.add
     
     skip1 = tf.add(deconv1,layer4_1x1) 
@@ -75,7 +75,7 @@ def layers(vgg_layer3_out, vgg_layer4_out, vgg_layer7_out, num_classes):
     deconv2 = tf.layers.conv2d_transpose(skip1, num_classes, 4, 2, padding='same',kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3))
     
     # 1x1 convolution on layer 3
-    layer3_1x1 = tf.layers.conv2d(vgg_layer3_out, num_classes, 1, padding = 'same', kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3))
+    layer3_1x1 = tf.layers.conv2d(vgg_layer3_out, num_classes, kernel = 1, strides=(1,1), padding = 'same', kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3))
     
     # adding skip layer 3 with tf.add
     skip2 = tf.add(deconv2, layer3_1x1)
