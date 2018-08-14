@@ -134,7 +134,7 @@ def train_nn(sess, epochs, batch_size, get_batches_fn, train_op, cross_entropy_l
     for epoch in range(epochs):
         probs=0.5
         rate=0.0003
-        rate*=(epoch+1)/5
+        rate*=(epoch+1)/10
         for image, label in get_batches_fn(batch_size):
                 #input_image=image 
                 #correct_label=label
@@ -191,8 +191,6 @@ def run():
         input_image, keep_prob,layer3_out, layer4_out, layer7_out = load_vgg(sess,vgg_path)
         layer_output = layers(layer3_out,layer4_out,layer7_out,num_classes)
         
-        #Setting learning rate       
-        #learning_rate = 0.001
         logits,train_op,cross_entropy_loss = optimize(layer_output,correct_label, learning_rate,num_classes)
         
         # TODO: Train NN using the train_nn function
@@ -202,7 +200,7 @@ def run():
         #keep_prob = 0.5
         
         #Setting Batch Size
-        batch_size=10
+        batch_size=8
         
         #Setting number of epochs
         epochs = 40
@@ -212,6 +210,16 @@ def run():
         #  helper.save_inference_samples(runs_dir, data_dir, sess, image_shape, logits, keep_prob, input_image)
         
         helper.save_inference_samples(runs_dir,data_dir,sess,image_shape,logits,keep_prob,input_image)
+        
+        '''
+        /tensorflow/bazel-bin/tensorflow/python/tools/freeze_graph \
+        --input_graph=base_graph.pb \
+        --input_checkpoint=ckpt \
+        --input_binary=true \
+        --output_graph=frozen_graph.pb \
+        --output_node_names=Softmax
+        
+        '''
 
         # OPTIONAL: Apply the trained model to a video
 
