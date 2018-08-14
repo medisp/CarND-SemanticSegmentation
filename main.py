@@ -83,10 +83,49 @@ def layers(vgg_layer3_out, vgg_layer4_out, vgg_layer7_out, num_classes):
     #Deconvolution upsampling by 8
     deconv3 = tf.layers.conv2d_transpose(skip2, num_classes, 16, 8, padding='same',kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3))
     
-    tf.Print(conv1x1,[tf.shape(conv1x1)[1:]])
+    #tf.Print(conv1x1,[tf.shape(deconv3)[1:]])
     
     return deconv3
 tests.test_layers(layers)
+
+def layers_modified(vgg_layer3_out, vgg_layer4_out, vgg_layer7_out, num_classes):
+    """
+    Create the layers for a fully convolutional network.  Build skip-layers using the vgg layers.
+    :param vgg_layer3_out: TF Tensor for VGG Layer 3 output
+    :param vgg_layer4_out: TF Tensor for VGG Layer 4 output
+    :param vgg_layer7_out: TF Tensor for VGG Layer 7 output
+    :param num_classes: Number of classes to classify
+    :return: The Tensor for the last layer of output
+    """
+    # TODO: Implement function
+    # creating a fully convolutional layer with 1x1 convolutions 
+    #num_classes = 2
+    conv1x1 = tf.layers.conv2d(vgg_layer7_out, num_classes, kernel_size = 1, strides=(1,1), padding = 'same', kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3))
+    
+    #deconvolution + matching output dimensions of layer 4
+    deconv1 = tf.layers.conv2d_transpose(conv1x1, filters=vgg_layer4_out.get_shape().as_list()[-1], 4, 2, padding='same',kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3))
+    
+    # 1x1 convolution on layer 4
+    #layer4_1x1 = tf.layers.conv2d(vgg_layer4_out, num_classes, kernel_size = 1, strides=(1,1), padding = 'same', kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3))
+    # adding skip layer 4 with tf.add
+    
+    skip1 = tf.add(deconv1,vgg_layer4_out) 
+    
+    #Deconvolution + matching output dimensions of layer 3
+    deconv2 = tf.layers.conv2d_transpose(skip1, filter=vgg_layer3_out.get_shape().as_list()[-1], 4, 2, padding='same',kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3))
+    
+    # 1x1 convolution on layer 3
+    #layer3_1x1 = tf.layers.conv2d(vgg_layer3_out, num_classes, kernel_size = 1, strides=(1,1), padding = 'same', kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3))
+    
+    # adding skip layer 3 with tf.add
+    skip2 = tf.add(deconv2, vgg_layer3_out)
+        
+    #Deconvolution upsampling by 8
+    deconv3 = tf.layers.conv2d_transpose(skip2, num_classes, 16, 8, padding='same',kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3))
+    
+    #tf.Print(conv1x1,[tf.shape(deconv3)[1:]])
+    
+    return deconv3
 
 
 def optimize(nn_last_layer, correct_label, learning_rate, num_classes):
@@ -130,9 +169,12 @@ def train_nn(sess, epochs, batch_size, get_batches_fn, train_op, cross_entropy_l
     # TODO: Implement function
     start_time = time.time()
     total_duration=time.time()-start_time
-    sess.run(tf.global_variables_initializer())
+    # Initializing tensorflow variables
+    session.run(tf.global_variables_initializer())
+    session.run(tf.local_variables_initializer())
+
     for epoch in range(epochs):
-        probs=0.5
+        probs=0.7
         rate=0.0003
         rate*=(epoch+1)/10
         for image, label in get_batches_fn(batch_size):
@@ -154,8 +196,8 @@ def train_nn(sess, epochs, batch_size, get_batches_fn, train_op, cross_entropy_l
         print("Epoch Duration :", epoch_duration)
         print("Total Duration :", total_duration)
         start_time = time.time()                 
-        if loss[1]<0.045:
-            print(" Ending Training as loss < 0.045 at epoch = {}".format(i))
+        if loss[1]<0.025:
+            print(" Ending Training as loss < 0.025 at epoch = {}".format(i))
             break                
                         
     pass
@@ -191,7 +233,7 @@ def run():
 
         # TODO: Build NN using load_vgg, layers, and optimize function
         input_image, keep_prob,layer3_out, layer4_out, layer7_out = load_vgg(sess,vgg_path)
-        layer_output = layers(layer3_out,layer4_out,layer7_out,num_classes)
+        layer_output = layers_modified(layer3_out,layer4_out,layer7_out,num_classes)
         
         logits,train_op,cross_entropy_loss = optimize(layer_output,correct_label, learning_rate,num_classes)
         
