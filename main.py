@@ -99,11 +99,35 @@ def layers_modified(vgg_layer3_out, vgg_layer4_out, vgg_layer7_out, num_classes)
     """
     # TODO: Implement function
     # creating a fully convolutional layer with 1x1 convolutions 
-    #num_classes = 2
-    conv1x1 = tf.layers.conv2d(vgg_layer7_out, num_classes, kernel_size = 1, strides=(1,1), padding = 'same', kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3))
+    # Testing different convolution parameters
+    #activation=tf.nn.relu,
+    #use_bias=True,
+    #kernel_initializer=tf.random_normal_initializer(stddev=0.01),
+    #bias_initializer=tf.zeros_initializer(),
+    #kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3),
+    #bias_regularizer=None,
+    
+    
+    l2weights_init_const = 0.01
+    l2weights_reg_const = 1e-3
+    conv1x1 = tf.layers.conv2d(vgg_layer7_out, 
+                               num_classes, 
+                               kernel_size = 1, 
+                               strides=(1,1), 
+                               padding = 'same', 
+                               kernel_initializer = tf.random_normal_initializer(l2weights_init_const),
+                               bias_initializer = tf.zeros_initializer(),
+                               kernel_regularizer = tf.contrib.layers.l2_regularizer(l2weights_reg_const))
     
     #deconvolution + matching output dimensions of layer 4
-    deconv1 = tf.layers.conv2d_transpose(conv1x1, filters=vgg_layer4_out.get_shape().as_list()[-1], kernel_size= 4, strides= (2, 2), padding='same',kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3))
+    deconv1 = tf.layers.conv2d_transpose(conv1x1,
+                                         filters=vgg_layer4_out.get_shape().as_list()[-1], # match layer4 output shape
+                                         kernel_size = 4, 
+                                         strides = (2, 2),
+                                         padding ='same',
+                                         kernel_initializer = tf.random_normal_initializer(l2weights_init_const),
+                                         bias_initializer = tf.zeros_initializer(),
+                                         kernel_regularizer = tf.contrib.layers.l2_regularizer(l2weights_reg_const))
     
     # 1x1 convolution on layer 4
     #layer4_1x1 = tf.layers.conv2d(vgg_layer4_out, num_classes, kernel_size = 1, strides=(1,1), padding = 'same', kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3))
@@ -112,7 +136,14 @@ def layers_modified(vgg_layer3_out, vgg_layer4_out, vgg_layer7_out, num_classes)
     skip1 = tf.add(deconv1,vgg_layer4_out) 
     
     #Deconvolution + matching output dimensions of layer 3
-    deconv2 = tf.layers.conv2d_transpose(skip1, filters=vgg_layer3_out.get_shape().as_list()[-1], kernel_size= 4,strides= (2,2), padding='same' ,kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3))
+    deconv2 = tf.layers.conv2d_transpose(skip1, 
+                                         filters=vgg_layer3_out.get_shape().as_list()[-1], # match layer3 output shape 
+                                         kernel_size = 4,
+                                         strides = (2,2), 
+                                         padding = 'same',
+                                         kernel_initializer = tf.random_normal_initializer(l2weights_init_const),
+                                         bias_initializer = tf.zeros_initializer(),
+                                         kernel_regularizer = tf.contrib.layers.l2_regularizer(l2weights_reg_const))
     
     # 1x1 convolution on layer 3
     #layer3_1x1 = tf.layers.conv2d(vgg_layer3_out, num_classes, kernel_size = 1, strides=(1,1), padding = 'same', kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3))
@@ -121,7 +152,14 @@ def layers_modified(vgg_layer3_out, vgg_layer4_out, vgg_layer7_out, num_classes)
     skip2 = tf.add(deconv2, vgg_layer3_out)
         
     #Deconvolution upsampling by 8
-    deconv3 = tf.layers.conv2d_transpose(skip2, num_classes, 16, 8, padding='same',kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3))
+    deconv3 = tf.layers.conv2d_transpose(skip2, 
+                                         num_classes, 
+                                         kernel_size = 16, 
+                                         strides = 8, 
+                                         padding = 'same',
+                                         kernel_initializer = tf.random_normal_initializer(l2weights_init_const),
+                                         bias_initializer = tf.zeros_initializer(),
+                                         kernel_regularizer = tf.contrib.layers.l2_regularizer(l2weights_reg_const))
     
     #tf.Print(conv1x1,[tf.shape(deconv3)[1:]])
     
