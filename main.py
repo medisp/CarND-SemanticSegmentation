@@ -115,7 +115,7 @@ def layers_modified(vgg_layer3_out, vgg_layer4_out, vgg_layer7_out, num_classes)
                                kernel_size = 1, 
                                strides=(1,1), 
                                padding = 'same',
-                               activation=tf.nn.relu,
+                               #activation=tf.nn.relu,
                                kernel_initializer = tf.random_normal_initializer(stddev = l2weights_init_const),
                                #bias_initializer = tf.zeros_initializer(),
                                kernel_regularizer = tf.contrib.layers.l2_regularizer(l2weights_reg_const))
@@ -126,7 +126,7 @@ def layers_modified(vgg_layer3_out, vgg_layer4_out, vgg_layer7_out, num_classes)
                                          kernel_size = 4, 
                                          strides = (2, 2),
                                          padding ='same',
-                                         activation=tf.nn.relu,
+                                         #activation=tf.nn.relu,
                                          kernel_initializer = tf.random_normal_initializer(stddev = l2weights_init_const),
                                          #bias_initializer = tf.zeros_initializer(),
                                          kernel_regularizer = tf.contrib.layers.l2_regularizer(l2weights_reg_const))
@@ -143,7 +143,7 @@ def layers_modified(vgg_layer3_out, vgg_layer4_out, vgg_layer7_out, num_classes)
                                          kernel_size = 4,
                                          strides = (2,2), 
                                          padding = 'same',
-                                         activation=tf.nn.relu,
+                                         #activation=tf.nn.relu,
                                          kernel_initializer = tf.random_normal_initializer(stddev = l2weights_init_const),
                                          #bias_initializer = tf.zeros_initializer(),
                                          kernel_regularizer = tf.contrib.layers.l2_regularizer(l2weights_reg_const))
@@ -160,8 +160,9 @@ def layers_modified(vgg_layer3_out, vgg_layer4_out, vgg_layer7_out, num_classes)
                                          kernel_size = 16, 
                                          strides = 8, 
                                          padding = 'same',
+                                         #activation=tf.nn.relu,
                                          kernel_initializer = tf.random_normal_initializer(l2weights_init_const),
-                                         bias_initializer = tf.zeros_initializer(),
+                                         #bias_initializer = tf.zeros_initializer(),
                                          kernel_regularizer = tf.contrib.layers.l2_regularizer(l2weights_reg_const))
     
     #tf.Print(conv1x1,[tf.shape(deconv3)[1:]])
