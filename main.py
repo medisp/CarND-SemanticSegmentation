@@ -115,7 +115,7 @@ def layers_modified(vgg_layer3_out, vgg_layer4_out, vgg_layer7_out, num_classes)
                                kernel_size = 1, 
                                strides=(1,1), 
                                padding = 'same',
-                               #activation=tf.nn.relu,
+                               activation=tf.nn.relu,
                                #kernel_initializer = tf.random_normal_initializer(stddev = l2weights_init_const),
                                #bias_initializer = tf.zeros_initializer(),
                                kernel_regularizer = tf.contrib.layers.l2_regularizer(l2weights_reg_const))
@@ -126,7 +126,7 @@ def layers_modified(vgg_layer3_out, vgg_layer4_out, vgg_layer7_out, num_classes)
                                          kernel_size = 4, 
                                          strides = (2, 2),
                                          padding ='same',
-                                         #activation=tf.nn.relu,
+                                         activation=tf.nn.relu,
                                          #kernel_initializer = tf.random_normal_initializer(stddev = l2weights_init_const),
                                          #bias_initializer = tf.zeros_initializer(),
                                          kernel_regularizer = tf.contrib.layers.l2_regularizer(l2weights_reg_const))
@@ -143,7 +143,7 @@ def layers_modified(vgg_layer3_out, vgg_layer4_out, vgg_layer7_out, num_classes)
                                          kernel_size = 4,
                                          strides = (2,2), 
                                          padding = 'same',
-                                         #activation=tf.nn.relu,
+                                         activation=tf.nn.relu,
                                          #kernel_initializer = tf.random_normal_initializer(stddev = l2weights_init_const),
                                          #bias_initializer = tf.zeros_initializer(),
                                          kernel_regularizer = tf.contrib.layers.l2_regularizer(l2weights_reg_const))
@@ -160,7 +160,7 @@ def layers_modified(vgg_layer3_out, vgg_layer4_out, vgg_layer7_out, num_classes)
                                          kernel_size = 16, 
                                          strides = 8, 
                                          padding = 'same',
-                                         #activation=tf.nn.relu,
+                                         activation=tf.nn.relu,
                                          #kernel_initializer = tf.random_normal_initializer(l2weights_init_const),
                                          #bias_initializer = tf.zeros_initializer(),
                                          kernel_regularizer = tf.contrib.layers.l2_regularizer(l2weights_reg_const))
@@ -289,7 +289,7 @@ def run():
         batch_size = 12
         
         #Setting number of epochs
-        epochs = 5
+        epochs = 10
         train_nn(sess,epochs, batch_size, get_batches_fn, train_op, cross_entropy_loss, input_image, correct_label, keep_prob, learning_rate)
         
         # TODO: Save inference data using helper.save_inference_samples
