@@ -116,8 +116,8 @@ def layers_modified(vgg_layer3_out, vgg_layer4_out, vgg_layer7_out, num_classes)
                                strides=(1,1), 
                                padding = 'same',
                                activation=tf.nn.relu,
-                               #kernel_initializer = tf.random_normal_initializer(stddev = l2weights_init_const),
-                               #bias_initializer = tf.zeros_initializer(),
+                               kernel_initializer = tf.random_normal_initializer(stddev = l2weights_init_const),
+                               bias_initializer = tf.zeros_initializer(),
                                kernel_regularizer = tf.contrib.layers.l2_regularizer(l2weights_reg_const))
     
     #deconvolution + matching output dimensions of layer 4
@@ -127,8 +127,8 @@ def layers_modified(vgg_layer3_out, vgg_layer4_out, vgg_layer7_out, num_classes)
                                          strides = (2, 2),
                                          padding ='same',
                                          activation=tf.nn.relu,
-                                         #kernel_initializer = tf.random_normal_initializer(stddev = l2weights_init_const),
-                                         #bias_initializer = tf.zeros_initializer(),
+                                         kernel_initializer = tf.random_normal_initializer(stddev = l2weights_init_const),
+                                         bias_initializer = tf.zeros_initializer(),
                                          kernel_regularizer = tf.contrib.layers.l2_regularizer(l2weights_reg_const))
     
     # 1x1 convolution on layer 4
@@ -144,8 +144,8 @@ def layers_modified(vgg_layer3_out, vgg_layer4_out, vgg_layer7_out, num_classes)
                                          strides = (2,2), 
                                          padding = 'same',
                                          activation=tf.nn.relu,
-                                         #kernel_initializer = tf.random_normal_initializer(stddev = l2weights_init_const),
-                                         #bias_initializer = tf.zeros_initializer(),
+                                         kernel_initializer = tf.random_normal_initializer(stddev = l2weights_init_const),
+                                         bias_initializer = tf.zeros_initializer(),
                                          kernel_regularizer = tf.contrib.layers.l2_regularizer(l2weights_reg_const))
     
     # 1x1 convolution on layer 3
@@ -161,8 +161,8 @@ def layers_modified(vgg_layer3_out, vgg_layer4_out, vgg_layer7_out, num_classes)
                                          strides = 8, 
                                          padding = 'same',
                                          activation=tf.nn.relu,
-                                         #kernel_initializer = tf.random_normal_initializer(l2weights_init_const),
-                                         #bias_initializer = tf.zeros_initializer(),
+                                         kernel_initializer = tf.random_normal_initializer(l2weights_init_const),
+                                         bias_initializer = tf.zeros_initializer(),
                                          kernel_regularizer = tf.contrib.layers.l2_regularizer(l2weights_reg_const))
     
     #tf.Print(conv1x1,[tf.shape(deconv3)[1:]])
@@ -216,9 +216,9 @@ def train_nn(sess, epochs, batch_size, get_batches_fn, train_op, cross_entropy_l
     sess.run(tf.local_variables_initializer())
 
     for epoch in range(epochs):
-        probs=0.7
-        rate=0.0002
-        rate*=(((epoch+1)/10)+1)
+        probs=0.75
+        rate=0.0005
+        rate*=(((epoch+1)/100)+1)
         for image, label in get_batches_fn(batch_size):
                 #input_image=image 
                 #correct_label=label
@@ -289,7 +289,7 @@ def run():
         batch_size = 12
         
         #Setting number of epochs
-        epochs = 10
+        epochs = 30
         train_nn(sess,epochs, batch_size, get_batches_fn, train_op, cross_entropy_loss, input_image, correct_label, keep_prob, learning_rate)
         
         # TODO: Save inference data using helper.save_inference_samples
