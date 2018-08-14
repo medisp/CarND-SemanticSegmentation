@@ -218,7 +218,7 @@ def train_nn(sess, epochs, batch_size, get_batches_fn, train_op, cross_entropy_l
     for epoch in range(epochs):
         probs=0.7
         rate=0.0002
-        rate*=(epoch+1)/10
+        rate*=(((epoch+1)/10)+1)
         for image, label in get_batches_fn(batch_size):
                 #input_image=image 
                 #correct_label=label
