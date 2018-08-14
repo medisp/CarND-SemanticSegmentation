@@ -154,7 +154,9 @@ def train_nn(sess, epochs, batch_size, get_batches_fn, train_op, cross_entropy_l
         print("Epoch Duration :", epoch_duration)
         print("Total Duration :", total_duration)
         start_time = time.time()                 
-                        
+        if loss<0.045:
+            print(" Ending Training as loss < 0.045 at epoch = {}".format(i))
+            break                
                         
     pass
 tests.test_train_nn(train_nn)
@@ -200,7 +202,7 @@ def run():
         #keep_prob = 0.5
         
         #Setting Batch Size
-        batch_size=8
+        batch_size=14
         
         #Setting number of epochs
         epochs = 40
