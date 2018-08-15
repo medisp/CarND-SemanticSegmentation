@@ -111,7 +111,7 @@ def layers_modified(vgg_layer3_out, vgg_layer4_out, vgg_layer7_out, num_classes)
     
     l2weights_init_const = 0.01
     l2weights_reg_const = 1e-3
-    l2weights_reg_const2 = 1e-4
+    l2weights_reg_const2 = 5e-4
     conv1x1 = tf.layers.conv2d(vgg_layer7_out, 
                                num_classes, 
                                kernel_size = 1, 
@@ -243,8 +243,8 @@ def train_nn(sess, epochs, batch_size, get_batches_fn, train_op, cross_entropy_l
         print("Epoch Duration :", epoch_duration)
         print("Total Duration :", total_duration)
         start_time = time.time()                 
-        if loss[1]<0.03:
-            print(" Ending Training as loss < 0.03 at epoch = {}".format(i))
+        if loss[1]<0.025:
+            print(" Ending Training as loss < 0.025 at epoch = {}".format(epoch+1))
             break                
                         
     pass
