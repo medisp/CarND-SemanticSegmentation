@@ -110,8 +110,8 @@ def layers_modified(vgg_layer3_out, vgg_layer4_out, vgg_layer7_out, num_classes)
     
     
     l2weights_init_const = 0.01
-    l2weights_reg_const = 1e-3
-    l2weights_reg_const2 = 5e-4
+    l2weights_reg_const = 6e-4
+    l2weights_reg_const2 = 1e-4
     conv1x1 = tf.layers.conv2d(vgg_layer7_out, 
                                num_classes, 
                                kernel_size = 1, 
